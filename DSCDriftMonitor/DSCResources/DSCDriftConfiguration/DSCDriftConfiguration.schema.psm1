@@ -4,22 +4,25 @@ Configuration DSCDriftConfiguration {
         [ValidateSet("Absent","Present")]
         [string]$Ensure)
 
-    Import-DSCResource -ModuleName PowerShellModule
-
-    PSModuleResource xDSCDiagnostics {
-        Module_Name = "xDSCDiagnostics"
-        Ensure = "Present"
-        InstallScope = "allusers"
-        MinimumVersion = "2.6.0.0"
-    }
+    Import-DSCResource -ModuleName PSDesiredStateConfiguration
 
     Script ManageDiagnostics {
         SetScript = {
             if ($using:Ensure -eq "Present") {
-                Update-xDscEventLogStatus -Channel Analytic -Status Enabled -Verbose
+                $eventLogFullName = "Microsoft-Windows-DSC/Analytic"
+                $statusEnabled = $true
+                $commandToExecute = "wevtutil set-log $eventLogFullName /e:$statusEnabled /q:$statusEnabled"
+                Write-Verbose -Message "Changing status of the log $eventLogFullName to Enabled"
+                Invoke-Expression $commandToExecute
+                #Update-xDscEventLogStatus -Channel Analytic -Status Enabled -Verbose
             }
             else {
-                Update-xDscEventLogStatus -Channel Analytic -Status Disabled -Verbose   
+                $eventLogFullName = "Microsoft-Windows-DSC/Analytic"
+                $statusEnabled = $false
+                $commandToExecute = "wevtutil set-log $eventLogFullName /e:$statusEnabled /q:$statusEnabled"
+                Write-Verbose -Message "Changing status of the log $eventLogFullName to Disabled"
+                Invoke-Expression $commandToExecute
+                #Update-xDscEventLogStatus -Channel Analytic -Status Enabled -Verbose 
             }
         }
         GetScript = {
