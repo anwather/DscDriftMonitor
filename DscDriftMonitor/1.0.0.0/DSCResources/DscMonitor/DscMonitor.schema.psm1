@@ -14,10 +14,11 @@ Configuration DscMonitor {
             # This should always run
             $metamof = "$env:windir\System32\Configuration\MetaConfig.mof"
             $configurationMode = Select-String -Path $metamof -Pattern "C\So\Sr\Sr\Se\Sc\St" -Quiet
-
+            
             if (!($configurationMode)) {
                 return $false
             }
+            else {Write-Verbose -Message "Configuration Mode is ApplyAndAutoCorrect"}
 
             $consistencyHash = @{
                 LogName = "Microsoft-Windows-DSC/Analytic"

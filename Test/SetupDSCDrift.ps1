@@ -1,15 +1,16 @@
 ﻿Configuration TestDSCDrift {
 
     Import-DSCResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -MOduleNAme DSCDriftMonitor
+    Import-DscResource -MOduleNAme DscDriftMonitor -ModuleVersion 1.0.0.0 
 
     Node localhost {
 
         LocalConfigurationManager {
             ConfigurationMode = "ApplyAndAutoCorrect"
+            AllowModuleOverwrite = $true
         }
 
-        DSCDriftConfiguration DDC {
+        DscDriftConfiguration DC {
             Ensure = "Present"
         }
     }
@@ -23,4 +24,4 @@ TestDSCDrift
 
 Set-DscLocalConfigurationManager .\TestDSCDrift -Verbose
 
-Start-DscConfiguration .\TestDSCDrift -Wait -Verbose
+Start-DscConfiguration .\TestDSCDrift -Wait -Verbose -Force

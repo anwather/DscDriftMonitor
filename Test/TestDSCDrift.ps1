@@ -1,7 +1,7 @@
 ﻿Configuration TestDSCDrift {
 
     Import-DSCResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -MOduleNAme DSCDriftMonitor
+    Import-DscResource -ModuleName DscDriftMonitor -ModuleVersion 1.0.0.0
 
     Node localhost {
         File TestFolder {
@@ -10,9 +10,10 @@
             Type = 'Directory'
         }
 
-        DSCMonitor DMon {
+        DscMonitor Dm {
 
         }
+        
     }
 }
 
