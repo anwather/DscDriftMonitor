@@ -1,7 +1,7 @@
 Configuration DSCMonitor {
     Param(
-        [int]$EventID,
-        [int]$Interval=15)
+        [int]$EventId=4999
+        )
     Import-DscResource -ModuleName PSDesiredStateConfiguration
 
     Script DSCMon {
@@ -29,8 +29,10 @@ Configuration DSCMonitor {
                 $message = $job.Message
                 $message -match "\[\[(?<ResourceType>\w+)\](?<ResourceName>\w+)\]" | Out-Null
                 if ($Matches.ResourceType -ne $null) {
-                        Write-Verbose -Message "Set event detected for resource type $($Matches.ResourceType) with name $($Matches.ResourceName)"
-                    }
+                    Write-Verbose -Message "Set event detected for resource type $($Matches.ResourceType) with name $($Matches.ResourceName)"
+                    New-EventLog -LogName Application -Source DSC -ErrorAction SilentlyContinue
+                    Write-EventLog -LogName Application -Source DSC -EventId $using:EventId -EntryType Warning -Message "Set event detected for resource type $($Matches.ResourceType) with name $($Matches.ResourceName)"
+                }
             }
 
             return $True
