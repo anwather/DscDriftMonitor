@@ -1,14 +1,17 @@
 ﻿Configuration TestDSCDrift {
 
-    Import-DSCResource -ModuleName psDEsiredStateConfiguration
-    Import-DscResource -MOduleNAme DSCdriftMonitor 
+    Import-DSCResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -MOduleNAme DSCDriftMonitor
 
     Node localhost {
 
-        DSCDriftConfiguration DDC {
-            Ensure = "Absent"
+        LocalConfigurationManager {
+            ConfigurationMode = "ApplyAndAutoCorrect"
         }
 
+        DSCDriftConfiguration DDC {
+            Ensure = "Present"
+        }
     }
 
 
@@ -18,4 +21,6 @@ Set-Location $env:Temp
 
 TestDSCDrift
 
-Start-DscConfiguration .\TestDSCDrift -Wait -vERbose
+Set-DscLocalConfigurationManager .\TestDSCDrift -Verbose
+
+Start-DscConfiguration .\TestDSCDrift -Wait -Verbose
