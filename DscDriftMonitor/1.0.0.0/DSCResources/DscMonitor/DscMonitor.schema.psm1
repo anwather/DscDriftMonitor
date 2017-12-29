@@ -1,4 +1,4 @@
-Configuration DSCMonitor {
+Configuration DscMonitor {
     Param(
         [int]$EventId=4999
         )
@@ -7,10 +7,18 @@ Configuration DSCMonitor {
     Script DSCMon {
         GetScript = {return @{Result=$true}}
         SetScript = {
-            # This never runs
+            # This runs only when the configuration mode is set incorrectly and throws an error
+            throw "Configuration Mode must be set to ApplyAndAutoCorrect for this resource to function"
         }
         TestScript = {
             # This should always run
+            $metamof = "$env:windir\System32\Configuration\MetaConfig.mof"
+            $configurationMode = Select-String -Path $metamof -Pattern "C\So\Sr\Sr\Se\Sc\St" -Quiet
+
+            if (!($configurationMode)) {
+                return $false
+            }
+
             $consistencyHash = @{
                 LogName = "Microsoft-Windows-DSC/Analytic"
                 Id = "4098"
