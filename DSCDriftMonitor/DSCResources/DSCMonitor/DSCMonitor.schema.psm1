@@ -28,7 +28,9 @@ Configuration DSCMonitor {
             foreach ($job in $jobEvents) {
                 $message = $job.Message
                 $message -match "\[\[(?<ResourceType>\w+)\](?<ResourceName>\w+)\]" | Out-Null
-                Write-Verbose -Message "Set event detected for resource type $($Matches.ResourceType) with name $($Matches.ResourceName)"
+                if ($Matches.ResourceType -ne $null) {
+                        Write-Verbose -Message "Set event detected for resource type $($Matches.ResourceType) with name $($Matches.ResourceName)"
+                    }
             }
 
             return $True
