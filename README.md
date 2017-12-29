@@ -10,7 +10,9 @@ This module contains the resource **DscDriftConfiguration** and **DscMonitor** f
 
 ### DscDriftMonitor
 
-* **EventID**: Event Id to be reported if configuration drift is detected. By default this is 4999.
+* **EventID**: Event Id to be reported if configuration drift is detected. By default this is 4999 and written to the Application Log with a source of DSC.
+
+If the LCM configuration mode is not set to ApplyandAutoCorrect an error will be thrown and the configuration will not apply. If detection of resources not in the desired state is necessary using other LCM modes then do not use this resource, use the reporting from the pull server or Test-DscConfiguration or the Dsc Environment Analyser. 
 
 ## Versions
 ***
