@@ -1,7 +1,7 @@
 ﻿Configuration TestDSCDrift {
 
     Import-DSCResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -MOduleNAme DscDriftMonitor -ModuleVersion 1.0.0.0 
+    Import-DscResource -MOduleName DscDriftMonitor -ModuleVersion 1.0.0.0 
 
     Node localhost {
 
