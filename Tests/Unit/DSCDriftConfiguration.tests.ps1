@@ -19,6 +19,10 @@
 # Unit Test Template Version: 1.2.1
 $script:moduleRoot = "$(Split-Path -Parent (Split-Path -Parent $PSScriptRoot))"
 $script:moduleRoot = "$($script:moduleroot)\DSCDriftMonitor\1.0.0.0\"
+
+$script:DSCModuleName = 'DscDriftMonitor'
+
+$script:DSCResourceName = 'DscDriftConfiguration'
 if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
      (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
 {
@@ -60,36 +64,13 @@ try
         # You may also follow one of the patterns provided in the TestsGuidelines.md file:
         # https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md
 
-        Describe '<Test-name>' {
-            BeforeEach {
-                # per-test-initialization
-            }
+        Describe "$($script:DSCResourceName)\Get-TargetResource" {
 
-            AfterEach {
-                # per-test-cleanup
-            }
+            Context 'Drift configuration is in the desired state' {
 
-            Context 'Context-description' {
-                BeforeEach {
-                    # per-test-initialization
-                }
-
-                AfterEach {
-                    # per-test-cleanup
-                }
-
-                It 'Should...test-description' {
-                    # test-code
-                }
-
-                It 'Should...test-description' {
-                    # test-code
-                }
-            }
-
-            Context 'Context-description' {
-                It 'Should ....test-description' {
-                    # test-code
+                It 'Drift configuration is in the desired state' {
+                    $eventLog = Invoke-DscResource -ModuleName $script:DSCModuleName -Name $script:DSCResourceName -Method Get
+                    Write-Output $eventLog
                 }
             }
         }
